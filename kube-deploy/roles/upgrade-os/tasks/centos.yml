@@ -32,10 +32,41 @@
   shell: yum install -y epel-release
   when: setup_host_ceph
 
-- name: installing ceph repo
+- name: Check if ceph release rpm is installed
+  command: rpm -q ceph-release
+  register: rpm_check
+  ignore_errors: true
+
+- name: Install the ceph repo if it is not installed already
   shell: rpm -Uhv http://download.ceph.com/rpm-jewel/el7/noarch/ceph-release-1-1.el7.noarch.rpm
-  when: setup_host_ceph
+  when:
+    - rpm_check.stdout.find('is not installed') != -1
+    - setup_host_ceph
 
 - name: installing ceph
   shell: yum install -y ceph
   when: setup_host_ceph
+
+- name: Turn off swap
+  shell: >
+    swapoff -a
+
+- name: swap - remove current swaps from fstab
+  lineinfile:
+    dest: /etc/fstab
+    regexp: '^/[\S]+\s+none\s+swap '
+    state: absent
+  become: yes
+
+- name: load the br_netfilter kernel module
+  shell: >
+    modprobe br_netfilter
+
+- name: update kernel settings
+  become: yes
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes

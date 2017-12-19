@@ -63,6 +63,8 @@
 
 - name: deploying flannel for kubernetes - x86_64
   shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   register: deploy_flannel
   when: kube_sdn == 'flannel' and host_arch == "amd64"
   ignore_errors: true

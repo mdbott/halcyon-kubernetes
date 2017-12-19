@@ -51,7 +51,9 @@
   when: host_arch is undefined
 
 - name: deploying the kubernetes dashboard
-  shell: kubectl create -f https://rawgit.com/kubernetes/dashboard/master/src/deploy/kubernetes-dashboard.yaml
+  shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   when: kube_addons_enabled and "{{kube_addons.kube_dashboard is defined}}" and host_arch == "amd64"
   ignore_errors: true
 

@@ -38,6 +38,8 @@
 
 - name: deploying romana for kubernetes
   shell: kubectl apply -f /etc/kubernetes/halcyon/network/romana.yml
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   register: deploy_weave
   when: (kube_sdn == 'romana')
   ignore_errors: true

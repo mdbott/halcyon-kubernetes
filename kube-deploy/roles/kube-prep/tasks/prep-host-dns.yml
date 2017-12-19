@@ -19,10 +19,12 @@
 # and pods running in the hosts network namespace to utilise k8s dns effectively
 
 - name: collect kube-dns ip from kubernetes masters
-  shell: kubectl get --namespace=kube-system svc kube-dns -o jsonpath={.spec.clusterIP}
+  shell: kubectl get --namespace=kube-system service kube-dns -o jsonpath={.spec.clusterIP}
   delegate_to: "{{ item }}"
   delegate_facts: true
   with_items: "{{ groups['kube-masters'] }}"
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   register: kube_dns_ip
 
 - name: setting kube-dns ip fact

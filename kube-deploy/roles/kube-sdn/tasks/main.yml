@@ -18,6 +18,8 @@
 #Checks for current SDN Deployment, if no deployment exists, deploy SDN defined in group_vars/all
 - name: check for an existing sdn deployment
   shell: kubectl get pods -o wide --all-namespaces
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   register: kube_podlist
   ignore_errors: true
 
@@ -28,6 +30,8 @@
 
 - name: check for existing weave deployment
   shell: kubectl get pods -o wide --all-namespaces
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   when: kube_podlist.stdout | search("weave")
   register: sdn_deployed_weave
   ignore_errors: true
@@ -47,6 +51,8 @@
 
 - name: check for existing Calico deployment
   shell: kubectl get pods -o wide --all-namespaces
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   when: kube_podlist.stdout | search("calico")
   register: sdn_deployed_calico
   ignore_errors: true
@@ -64,6 +70,8 @@
 
 - name: check for existing canal deployment
   shell: kubectl get pods -o wide --all-namespaces
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   when: kube_podlist.stdout | search("canal")
   register: sdn_deployed_canal
   ignore_errors: true
@@ -81,6 +89,8 @@
 
 - name: check for existing romana deployment
   shell: kubectl get pods -o wide --all-namespaces
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   when: kube_podlist.stdout | search("romana")
   register: sdn_deployed_romana
   ignore_errors: true
@@ -98,6 +108,8 @@
 
 - name: check for existing flannel deployment
   shell: kubectl get pods -o wide --all-namespaces
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   when: kube_podlist.stdout | search("flannel")
   register: sdn_deployed_flannel
   ignore_errors: true

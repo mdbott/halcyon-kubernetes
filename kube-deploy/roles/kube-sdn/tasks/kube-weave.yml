@@ -25,6 +25,8 @@
 - name: deploying weave for kubernetes
   shell: kubectl apply -f https://git.io/weave-kube
   register: deploy_weave
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   when: (kube_sdn == 'weave')
   ignore_errors: true
 

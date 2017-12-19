@@ -14,7 +14,26 @@
 # limitations under the License.
 #
 
+- name: fetch kubernetes certs
+  fetch:
+    src: /etc/kubernetes/admin.conf
+    dest: /tmp/admin.conf
+    flat: yes
+  when: inventory_hostname in groups['kube-masters']
+  run_once: true
+
+
+- name: write out kubernetes certs
+  copy:
+    dest: /etc/kubernetes/admin.conf
+    src: /tmp/admin.conf
+    owner: root
+    group: root
+    mode: 0600
+  when: inventory_hostname in groups['kube-workers']
+
+
 - name: patch kube-controller-manager to support ceph pvc creation
-  command: sed -i "s|gcr.io/google_containers/kube-controller-manager-amd64:{{ kube_version }}|quay.io/attcomdev/kube-controller-manager:{{ kube_version }}|g" /etc/kubernetes/manifests/kube-controller-manager.json
+  command: sed -i "s|gcr.io/google_containers/kube-controller-manager-amd64:{{ kube_version }}|quay.io/attcomdev/kube-controller-manager:latest|g" /etc/kubernetes/manifests/kube-controller-manager.yaml
   when: patch_kube_ceph and inventory_hostname in groups['kube-masters']
   ignore_errors: true

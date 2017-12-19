@@ -40,5 +40,5 @@
   register: worker_kubelet
 
 - name: join workers to the initialized kubernetes cluster
-  shell: "kubeadm join --token {{ init_token }} {{ kube_api }}"
+  shell: "kubeadm join --token {{ init_token }} {{ kube_api }}:6443  --discovery-token-unsafe-skip-ca-verification"
   when: inventory_hostname in groups['kube-workers'] and worker_kubelet.stat.exists == false

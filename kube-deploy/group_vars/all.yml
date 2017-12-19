@@ -14,17 +14,17 @@
 # limitations under the License.
 #
 ## Deployment Options:
-bootstrap_os: ubuntu
-public_iface: enp0s3
-nat_iface: enp0s3
+bootstrap_os: centos
+public_iface: eth0
+nat_iface: eth0
 proxy_enable: false
 #
 #
 ## Kubernetes Parameters:
 kubectl_endpoint: kube1
-kubelet_hostname_override: true
+kubelet_hostname_override: false
 init_token: ac7da3.b2cofcda6ab01976
-kube_version: v1.5.4
+kube_version: v1.9.0
 #
 #
 ## Kubernetes SDN Deployment Options:
@@ -51,7 +51,7 @@ helm_version: v2.1.0
 #
 ## Docker Daemon Options:
 # Shared mounts is required for several OpenStack Kolla-Kubernetes components.
-docker_shared_mounts: false
+docker_shared_mounts: true
 #
 ## Registry Type:
 # Possible values: default, docker_insecure
@@ -61,10 +61,10 @@ docker_insecure_registry: 10.0.2.2:5000
 #
 ## Kolla-Kubernetes addtional options:
 # Setup the host to use the kube-dns nameservers (required for ceph)
-setup_host_kube_dns: false
+setup_host_kube_dns: true
 # Setup the host for ceph
-setup_host_ceph: false
+setup_host_ceph: true
 # Patch kubernetes-controller-manager for ceph PVC support
 # This pulls in quay.io/attcomdev/kube-controller-manager:v1.5.4
 # to replace the upstream image
-patch_kube_ceph: false
+patch_kube_ceph: true

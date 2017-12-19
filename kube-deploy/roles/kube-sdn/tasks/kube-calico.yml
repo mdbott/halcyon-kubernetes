@@ -27,6 +27,8 @@
 
 - name: deploying calico for kubernetes
   shell: kubectl apply -f http://docs.projectcalico.org/{{ calico_version }}/getting-started/kubernetes/installation/hosted/kubeadm/calico.yaml
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   register: deploy_calico
   when: (kube_sdn == 'calico')
   ignore_errors: true

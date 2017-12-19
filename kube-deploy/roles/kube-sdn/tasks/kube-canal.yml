@@ -27,6 +27,8 @@
 
 - name: deploying canal for kubernetes
   shell: kubectl create -f https://raw.githubusercontent.com/tigera/canal/master/k8s-install/kubeadm/canal.yaml
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
   register: deploy_canal
   when: (kube_sdn == 'canal')
   ignore_errors: true
